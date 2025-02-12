@@ -1,7 +1,8 @@
 # jemf-pt-2006
 Replication materials related to Paye and Timmermann (2006, Journal of Empirical Finance)
 
-There are limited replication materials for this paper given its age. 
+There are limited replication materials for this paper given its age. The main folder contains the final working paper 
+version of the paper. 
 
 What is available:
 
