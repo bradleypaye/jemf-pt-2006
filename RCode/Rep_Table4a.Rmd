@@ -40,11 +40,13 @@ From the table, the R^2^ is 0.62 percent and the slope is 0.32.
 ```{r firstreg}
 library(dplyr)
 library(tibble)
-#create lagged US dividend yield
-regdata <- Data_intl52 %>% add_column(lag_USDY = lag(Data_intl52$USDY)/100)
+#create lagged predictors (if not already included)
+regdata <- Data_intl52 %>% add_column(lagUS_DY = lag(Data_intl52$USDY)/100, lagUS_TB = lag(Data_intl52$USTB)/1200,
+        lagUK_TB = lag(Data_intl52$UKTB)/1200, 
+        lagUK_Term = lag(Data_intl52$UKTerm)/1200)
 
 #Now regress S&P 500 excess return (USeret) on lagged DY
-lm_USdy <- lm(USeret ~ lag_USDY,data=regdata)
+lm_USdy <- lm(USeret ~ lagUS_DY,data=regdata)
 
 summary(lm_USdy)
 
@@ -56,10 +58,28 @@ Now we will run the full set of predictive regressions for the US data over 1952
 
 ```{r toptable4}
 
-#run reg for NYSE/nan
-lm_Nysedy <- lm(NYSEeret ~ lag_USDY,data=regdata)
-lm_Nandy <- lm(NANeret ~ lag_USDY,data=regdata)
+#Additional DY regressions
+lm_Nysedy <- lm(NYSEeret ~ lagUS_DY,data=regdata)
+lm_Nandy <- lm(NANeret ~ lagUS_DY,data=regdata)
 lm_UKdy <- lm(UKeret ~ lagUK_DY, data=regdata)
+
+#T-bill regressions
+lm_Nysetb <- lm(NYSEeret ~ lagUS_TB,data=regdata)
+lm_Nantb <- lm(NANeret ~ lagUS_TB,data=regdata)
+lm_UStb <- lm(USeret ~ lagUS_TB,data=regdata)
+lm_UKtb <- lm(UKeret ~ lagUK_TB,data=regdata)
+
+#Term spread regressions
+lm_Nyseterm <- lm(NYSEeret ~ lagUS_Term,data=regdata)
+lm_Nanterm <- lm(NANeret ~ lagUS_Term,data=regdata)
+lm_USterm <- lm(USeret ~ lagUS_Term,data=regdata)
+lm_UKterm <- lm(UKeret ~ lagUK_Term,data=regdata)
+
+#def spread regressions -- note we always us US DEF spread
+lm_Nysedef <- lm(NYSEeret ~ lagUS_DEF, data=regdata)
+lm_Nandef <- lm(NANeret ~ lagUS_DEF,data=regdata)
+lm_USdef <- lm(USeret ~ lagUS_DEF,data=regdata)
+lm_UKdef <- lm(UKeret ~ lagUS_DEF,data=regdata)
 
 summary(lm_Nysedy)
 summary(lm_Nandy)
@@ -90,9 +110,78 @@ Tab4_Top[3,2] <- lm_USdy$coefficients[2]
 Tab4_Top[3,1] <- summary(lm_USdy)$r.squared*100
 Tab4_Top[3,3] <- tmp[2]
 
+tmp <- sqrt(diag(vcov(lm_UKdy)))
+Tab4_Top[4,2] <- lm_UKdy$coefficients[2]
+Tab4_Top[4,1] <- summary(lm_UKdy)$r.squared*100
+Tab4_Top[4,3] <- tmp[2]
 
+tmp <- sqrt(diag(vcov(lm_UStb)))
+Tab4_Top[3,5] <- lm_UStb$coefficients[2]
+Tab4_Top[3,4] <- summary(lm_UStb)$r.squared*100
+Tab4_Top[3,6] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_Nysetb)))
+Tab4_Top[1,5] <- lm_Nysetb$coefficients[2]
+Tab4_Top[1,4] <- summary(lm_Nysetb)$r.squared*100
+Tab4_Top[1,6] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_Nantb)))
+Tab4_Top[2,5] <- lm_Nantb$coefficients[2]
+Tab4_Top[2,4] <- summary(lm_Nantb)$r.squared*100
+Tab4_Top[2,6] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_UKtb)))
+Tab4_Top[4,5] <- lm_UKtb$coefficients[2]
+Tab4_Top[4,4] <- summary(lm_UKtb)$r.squared*100
+Tab4_Top[4,6] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_Nyseterm)))
+Tab4_Top[1,8] <- lm_Nyseterm$coefficients[2]
+Tab4_Top[1,7] <- summary(lm_Nyseterm)$r.squared*100
+Tab4_Top[1,9] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_Nanterm)))
+Tab4_Top[2,8] <- lm_Nanterm$coefficients[2]
+Tab4_Top[2,7] <- summary(lm_Nanterm)$r.squared*100
+Tab4_Top[2,9] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_USterm)))
+Tab4_Top[3,8] <- lm_USterm$coefficients[2]
+Tab4_Top[3,7] <- summary(lm_USterm)$r.squared*100
+Tab4_Top[3,9] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_UKterm)))
+Tab4_Top[4,8] <- lm_UKterm$coefficients[2]
+Tab4_Top[4,7] <- summary(lm_UKterm)$r.squared*100
+Tab4_Top[4,9] <- tmp[2]
+
+
+tmp <- sqrt(diag(vcov(lm_Nysedef)))
+Tab4_Top[1,11] <- lm_Nysedef$coefficients[2]
+Tab4_Top[1,10] <- summary(lm_Nysedef)$r.squared*100
+Tab4_Top[1,12] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_Nandef)))
+Tab4_Top[2,11] <- lm_Nandef$coefficients[2]
+Tab4_Top[2,10] <- summary(lm_Nandef)$r.squared*100
+Tab4_Top[2,12] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_USdef)))
+Tab4_Top[3,11] <- lm_USdef$coefficients[2]
+Tab4_Top[3,10] <- summary(lm_USdef)$r.squared*100
+Tab4_Top[3,12] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_UKdef)))
+Tab4_Top[4,11] <- lm_UKdef$coefficients[2]
+Tab4_Top[4,10] <- summary(lm_UKdef)$r.squared*100
+Tab4_Top[4,12] <- tmp[2]
 # display
 print(Tab4_Top)
+
+#set row names
+row.names(Tab4_Top) <- c("Nyse","Nan","SP500","UK")
+
+knitr::kable(Tab4_Top,digits=3,caption = "Table 4, Panel A (Top)")
 
 
 ```
