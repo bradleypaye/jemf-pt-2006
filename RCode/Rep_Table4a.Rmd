@@ -1,0 +1,55 @@
+---
+title: "Rep_Table4a"
+author: "Bradley Paye"
+date: "2025-02-12"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This document loads data from Paye and Timmermann (2006, Journal of Empirical Finance). It then replicates the univariate (full sample) regressions reported in Table 4, panel A of the paper.
+
+
+```{r loaddata}
+library(here)  
+library(readxl)
+
+#Load 1952-2003 data for multiple countries
+Data_intl52 <- read_excel(here("RawData", "IntlData1952.xlsx"))
+ 
+Data_intl52
+
+#Load 1970-2003 data for US,UK
+Data_intl70 <- read_excel(here("RawData", "IntlData1970.xlsx"))
+
+summary(Data_intl70)
+
+```
+## Run a first regression
+
+Here we will try a first regression, replicating entry for S&P 500 excess return on DY in Table 4 panel A.
+
+From the table, the R^2^ is 0.62 percent and the slope is 0.32.
+
+```{r firstreg}
+library(dplyr)
+library(tibble)
+#create lagged US dividend yield
+regdata <- Data_intl52 %>% add_column(lag_USDY = lag(Data_intl52$USDY)/100)
+
+#Now regress S&P 500 excess return (USeret) on lagged DY
+lm_USdy <- lm(USeret ~ lag_USDY,data=regdata)
+
+summary(lm_USdy)
+
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
