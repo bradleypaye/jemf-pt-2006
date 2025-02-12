@@ -50,6 +50,51 @@ summary(lm_USdy)
 
 
 ```
+## Make table replicating top of Table 4, panel A
 
+Now we will run the full set of predictive regressions for the US data over 1952-2003.
+
+```{r toptable4}
+
+#run reg for NYSE/nan
+lm_Nysedy <- lm(NYSEeret ~ lag_USDY,data=regdata)
+lm_Nandy <- lm(NANeret ~ lag_USDY,data=regdata)
+lm_UKdy <- lm(UKeret ~ lagUK_DY, data=regdata)
+
+summary(lm_Nysedy)
+summary(lm_Nandy)
+
+# Next part makes dataframe / table
+columns= c("DY_r2","DY_beta","DY_se",
+           "TBL_r2","TBL_beta","TBL_se",
+           "TERM_r2","TERM_beta","TERM_se",
+           "DEF_r2","DEF_beta","DEF_se") 
+
+Tab4_Top = data.frame(matrix(nrow = 0, ncol = length(columns))) 
+# assign column names
+colnames(Tab4_Top) = columns
+
+# assign reg results
+tmp <- sqrt(diag(vcov(lm_Nysedy)))
+Tab4_Top[1,2] <- lm_Nysedy$coefficients[2]
+Tab4_Top[1,1] <- summary(lm_Nysedy)$r.squared*100
+Tab4_Top[1,3] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_Nandy)))
+Tab4_Top[2,2] <- lm_Nandy$coefficients[2]
+Tab4_Top[2,1] <- summary(lm_Nandy)$r.squared*100
+Tab4_Top[2,3] <- tmp[2]
+
+tmp <- sqrt(diag(vcov(lm_USdy)))
+Tab4_Top[3,2] <- lm_USdy$coefficients[2]
+Tab4_Top[3,1] <- summary(lm_USdy)$r.squared*100
+Tab4_Top[3,3] <- tmp[2]
+
+
+# display
+print(Tab4_Top)
+
+
+```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
