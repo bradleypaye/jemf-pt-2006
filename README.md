@@ -1,6 +1,6 @@
 # jemf-pt-2006
 ## Overview
-This repository contains (limited) replication materials related to [Paye and Timmermann (2006, Journal of Empirical Finance)]([https://www.example.co](https://www.sciencedirect.com/science/article/abs/pii/S0927539806000156) 
+This repository contains (limited) replication materials related to [Paye and Timmermann (2006, Journal of Empirical Finance)](https://www.sciencedirect.com/science/article/abs/pii/S0927539806000156) 
 
 There are limited replication materials for this paper given its age. The main folder contains the final working paper 
 version of the paper. 
