@@ -1,17 +1,19 @@
 # jemf-pt-2006
-Replication materials related to Paye and Timmermann (2006, Journal of Empirical Finance)
+## Overview
+This repository contains (limited) replication materials related to [Paye and Timmermann (2006, Journal of Empirical Finance)]([https://www.example.co](https://www.sciencedirect.com/science/article/abs/pii/S0927539806000156) 
 
 There are limited replication materials for this paper given its age. The main folder contains the final working paper 
 version of the paper. 
 
 What is available:
 
-1. IntlData1970: An Excel worksheet consisting of raw data used in the paper for the 1970-2003 sample
-2. IntlData1952: An Excel worksheet consisting of raw data used in the paper for the 1952-2003 sample (US and UK only)
+- The RawData folder contains:
+  1. IntlData1970.xlsx: An Excel worksheet consisting of raw data used in the paper for the 1970-2003 sample
+  2. IntlData1952.xlsx: An Excel worksheet consisting of raw data used in the paper for the 1952-2003 sample (US and UK only)
+- The RCode folder contains:
+  1. Rep_Table4a.Rmd: An R markdown file that replicates aspects of Table 4 in the paper (univariate predictive regressions)
 
-Notes on these files:
-
-I have replicated by hand various results reported in Panel A of Table 4 of the published paper using the above data files.
+Additional notes on these files:
 
 In order to replicate results in the paper, please pay heed to the following:
 
@@ -22,6 +24,7 @@ In order to replicate results in the paper, please pay heed to the following:
 and 2) divide the dividend yields in the raw data by 100
 5. The same re-scalings should be done for the raw data in 'IntlData1970' in order to match the Table 4 results (see previous)
 
+## Limitations and future development
 Most results in the paper were generated using a series of "Gauss" codes. I no longer have a Gauss license and cannot run these codes.
 
 If I am able to do so in the future, I will add to replication materials beyond the raw data provided here.
